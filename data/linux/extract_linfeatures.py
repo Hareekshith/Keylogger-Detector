@@ -20,6 +20,9 @@ def is_sus(pn):
 #label: detects whether it is a keylogger or not
 df["label"] = df["process_name"].apply(lambda x: 1 if is_sus(x) else 0)
 
+#Deletes the NaN rows, keeping the only required rows!
+df.dropna(inplace=True)
+
 #shifting the updated data with label
 df.to_csv("lpdata.csv",index=False)
 
