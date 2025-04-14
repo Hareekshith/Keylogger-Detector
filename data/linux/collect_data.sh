@@ -5,7 +5,7 @@
 mkdir -p samples
 mkdir -p csamples
 #gets the required feed from the computer
-for i in {1..9}
+for i in $(seq 1 9);
 do
   sleep 5;
   ps -eo pid,comm,%cpu,%mem --sort=-%cpu --no-headers | while read pid comm cpu mem; 
