@@ -21,7 +21,7 @@ def sus(r):
     return 1 if s>=2 else 0
 
 def main():
-    f = pd.read_csv("samples/ldata41.csv", sep = "|", names=["pid","process","cpu","memory"])
+    f = pd.read_csv("samples/ldata41.csv", sep = "|", names=["pid","process","cpu","memory","p","pid"])
     f['label'] = f.apply(sus,axis=1)
     f.to_csv("csamples/flidata.csv", index=False)
     #prints the ones who's label is 1
