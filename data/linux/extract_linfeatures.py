@@ -1,30 +1,31 @@
 import pandas as pd
+import os
 
-#creates a csv object to access its content
-df = pd.read_csv("ldata.csv",sep="|",names=["pid","process_name","cpu","mem"])
+#A list which contains the directories where no files are run usually 
+sus_path=["/tmp","/dev/shm","/var/tmp","/.cache","/.config"]
 
-#convert the values of cpu and memory to numerals
-df["cpu"] = pd.to_numeric(df["cpu"],errors="coerce")
-df["mem"] = pd.to_numeric(df["mem"],errors="coerce")
+#function to use the sus_path and returns if it matches
+def susp(path):
+    return any(path.startswith(sp) for sp in sus_path)
 
-#keylogger identification list
-sus = ["keylogger","klgr","hooker","logkey","logger"]
+#function which checks three conditions for detection of keylogger
+def sus(r):
+    s=0
+    if 'p' in r and isinstance(r['p'],str):
+        if susp(r['p']): #checks whether the path is suspicious
+            s+=1
+        if 'p' in r and '/.' in r['p']: #checks whether the path contains /. in path, usually no file should be running
+            s+=1
+        if 'ai' in r and r['ai'] == 1: # checks whether the input is accessed
+            s+=1
+    return 1 if s>=2 else 0
 
-#keylogger indentification function
-def is_sus(pn):
-    if not isinstance(pn,str):
-        return 0
-    else:
-        return any(k in pn.lower() for k in sus)
+def main():
+    f = pd.read_csv("samples/ldata41.csv", sep = "|", names=["pid","process","cpu","memory"])
+    f['label'] = f.apply(sus,axis=1)
+    f.to_csv("csamples/flidata.csv", index=False)
+    #prints the ones who's label is 1
+    print(f[f["label"] == 1][["pid", "process"]])
 
-#label: detects whether it is a keylogger or not
-df["label"] = df["process_name"].apply(lambda x: 1 if is_sus(x) else 0)
-
-#Deletes the NaN rows, keeping the only required rows!
-df.dropna(inplace=True)
-
-#shifting the updated data with label
-df.to_csv("lpdata.csv",index=False)
-
-#prints the ones who's label is 1
-print(df[df["label"] == 1][["pid", "process_name"]])
+if __name__=="__main__":
+    main()
