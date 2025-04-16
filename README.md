@@ -4,6 +4,7 @@ A project to detect keyloggers in the system either in signature or a program! F
 ## Linux
 * Navigate to /data/Linux/
 * Execute the file collect_data (run `./collect_data.sh`)
-* Then execute extract_linfeatures.py for a cleaned csv without NaN values
+* Then execute `python3 extract_linfeatures.py` for a cleaned csv without NaN values
 
 ## Windows (Coming Soon!!)
+Please wait till the project is completed!
