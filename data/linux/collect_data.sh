@@ -3,7 +3,7 @@ echo "PID,PPID,process,Executable,Commandline,Startup,NetworkAccess,FileWrite,Sc
 
 # Define some keywords to ignore (non-keylogger processes)
 IGNORE_PROCESSES=("firefox" "chrome" "gnome-shell" "xorg" "gdm")
-
+for i in $(seq 11 20); do
 for pid in $(ls /proc | grep -E '^[0-9]+$'); do
     exe_path=$(readlink -f /proc/$pid/exe 2>/dev/null)
     cmdline=$(tr '\0' ' ' < /proc/$pid/cmdline 2>/dev/null)
@@ -60,6 +60,6 @@ for pid in $(ls /proc | grep -E '^[0-9]+$'); do
     done
 
     # Write the results into the CSV file
-    echo "$pid,$ppid,$process_name,\"$exe_path\",\"$cmdline\",$startup,$network_access,$file_write,$script,$input_tap" >> samples/processes.csv
+    echo "$pid,$ppid,$process_name,\"$exe_path\",\"$cmdline\",$startup,$network_access,$file_write,$script,$input_tap" >> samples/ldata$i.csv
 done
-
+done
