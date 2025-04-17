@@ -1,29 +1,49 @@
-import pandas as pd
-import os
+import csv
 
-#A list which contains the directories where no files are run usually 
-sus_path=["/tmp","/dev/shm","/var/tmp","/.cache","/.config"]
+#parses yes as 1 and no as 0
+def pb(p):
+    return 1 if p=="yes" else 0
 
-#function to use the sus_path and returns if it matches
-def susp(path):
-    return any(path.startswith(sp) for sp in sus_path)
+# List of processes to ignore, like well-known browsers
+IGNORE_PROCESSES = ['firefox', 'chrome', 'brave', 'gnome-shell']
 
-#function which checks three conditions for detection of keylogger
-def sus(r):
-    s=0
-    if 'p' in r and isinstance(r['p'],str):
-        if 'p' in r and (susp(r['p']) or '/.' in r['p']): #checks whether the path contains /. in path, usually no file should be running
-            s+=1
-        if int(r.get(ai,0) == 1): #Checks whether suspiciously inputs are written
-            s+=2
-    return 1 if s>=2 else 0
+def is_keylogger(process):
+    startup = int(pb(process['Startup']))
+    network = int(pb(process['NetworkAccess']))
+    file_write = int(pb(process['FileWrite']))
+    script = int(pb(process['ScriptBased']))
+    input_tap = int(pb(process['InputTap']))
+    process_name = process['process'].lower()
+    # Exclude well-known processes like browsers
+    if any(ignore in process_name for ignore in IGNORE_PROCESSES):
+        return 0
 
-def main():
-    f = pd.read_csv("samples/ldata1.csv", sep = "|", names=["pid","process","cpu","memory","ifi","ai"])
-    f['label'] = f.apply(sus,axis=1)
-    f.to_csv("csamples/flidata.csv", index=False)
-    #prints the ones who's label is 1
-    print(f[f["label"] == 1][["pid", "process"]])
+    # Add more checks to refine heuristics, such as:
+    # - Avoid flagging legitimate Python processes by checking the script arguments or known behavior
+    if 'python' in process_name:
+        if "keylogger" in process_name:  # Only flag Python processes with "keylogger" in arguments
+            return 1
 
-if __name__=="__main__":
-    main()
+    # Refined tiered logic for keylogger detection
+    if (
+        (network and script) or 
+        (file_write and script) or
+        (startup and input_tap) or
+        (script and "keylogger" in process['Commandline'])
+    ):
+        return 1
+    return 0
+
+def extract_features(input_file, output_file):
+    with open(input_file, 'r') as infile, open(output_file, 'w', newline='') as outfile:
+        reader = csv.DictReader(infile)
+        fieldnames = reader.fieldnames + ['label']
+        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for row in reader:
+            row['label'] = is_keylogger(row)
+            writer.writerow(row)
+
+if __name__ == '__main__':
+    extract_features('samples/processes.csv', 'linux_features.csv')
