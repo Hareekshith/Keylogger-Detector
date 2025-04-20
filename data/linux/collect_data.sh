@@ -19,7 +19,7 @@ is_ignored_process() {
 # Collect data into multiple files for variety
 for i in $(seq 51 60); do
     output_file="samples/ldata$i.csv"
-    echo "PID,PPID,process,Executable,Commandline,Startup,NetworkAccess,FileWrite,ScriptBased,InputTap" > "$output_file"
+    echo "PID,PPID,process,Executable,Commandline,startup,NetworkAccess,FileWrite,ScriptBased,InputTap" > "$output_file"
 
     for pid in $(ls /proc | grep -E '^[0-9]+$'); do
         # Extract process details

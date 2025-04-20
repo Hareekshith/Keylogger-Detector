@@ -8,7 +8,7 @@ def pb(p):
 IGNORE_PROCESSES = ['firefox', 'chrome', 'brave', 'gnome-shell']
 
 def is_keylogger(process):
-    startup = int(pb(process['Startup']))
+    startup = int(pb(process['startup']))
     network = int(pb(process['NetworkAccess']))
     file_write = int(pb(process['FileWrite']))
     script = int(pb(process['ScriptBased']))
@@ -22,8 +22,7 @@ def is_keylogger(process):
     if (
         (network and script) or 
         (file_write and script) or
-        (startup and input_tap) or
-        (script and "keylogger" in process['Commandline'])
+        (startup and input_tap) 
     ):
         return 1
     return 0
