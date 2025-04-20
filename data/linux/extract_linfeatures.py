@@ -18,12 +18,6 @@ def is_keylogger(process):
     if any(ignore in process_name for ignore in IGNORE_PROCESSES):
         return 0
 
-    # Add more checks to refine heuristics, such as:
-    # - Avoid flagging legitimate Python processes by checking the script arguments or known behavior
-    if 'python' in process_name:
-        if "keylogger" in process_name:  # Only flag Python processes with "keylogger" in arguments
-            return 1
-
     # Refined tiered logic for keylogger detection
     if (
         (network and script) or 
@@ -46,4 +40,4 @@ def extract_features(input_file, output_file):
             writer.writerow(row)
 
 if __name__ == '__main__':
-    extract_features('samples/processes.csv', 'linux_features.csv')
+    extract_features('samples/ldata56.csv', 'linux_features1.csv')
