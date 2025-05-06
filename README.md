@@ -1,6 +1,6 @@
 ![screenshots](https://github.com/hareekshith/keylogger-detection/blob/main/poster_final.jpg)
 
-# keylogger-detection
+# Keylogger-detector
 A project to detect keyloggers in the system either in signature or a program! For windows and Linux
 
 ## Linux
