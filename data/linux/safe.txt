@@ -1,0 +1,6 @@
+firefox 
+chrome 
+gnome-shell 
+xorg 
+gdm 
+brave

@@ -3,7 +3,9 @@
 mkdir -p samples
 
 # List of known safe processes to skip
-IGNORE_PROCESSES=("firefox" "chrome" "gnome-shell" "xorg" "gdm" "brave")
+fn=safe.txt
+declare -a IGNORE_PROCESSES
+IGNORE_PROCESSES=(`cat "$fn"`)
 
 # Function to check if a process should be ignored
 is_ignored_process() {
