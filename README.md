@@ -24,8 +24,11 @@ Below is the detailed explanation on how each file performs their task.
 ### `stejkeu.py & keylogger_m2.py`
 * These are the sample keylogger programs that were created to test the detector.
 
-## Author
-Hareekshith AS
+## Author & Contributors
+* Hareekshith AS
+* Jawagar Vetrivel
+* Amrith Ram S
+* Sakthi Shivaram M
 
 ## License
 This project is licensed under the terms of the GPL-3.0 license.
